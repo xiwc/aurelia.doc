@@ -247,16 +247,16 @@ export class CustomerDetail{
 }
 ```
 
-The `Lazy` resolver doesn't actually provide an instance of `HttpClient`. Instead, it provides a function which, when called, will return you an instance of HttpClient. There are several different resolvers out-of-the-box and you can create your own by authoring a class that inherits from `Resolver`. Here's a list of what we provide for you:
+`Lazy`解析器实际上不提供`HttpClient`的实例, 作为替代, 它提供一个函数, 当被调用, 它会返回一个`HttpClient`的实例. 有几个不同的解析器可以拆箱使用, 并且你可以创建自己的解析器,通过授权一个类继承`Resolver`. 这里是我们为你提供的一个列表:
 
-* `Lazy` - Injects a function for lazily evaluating the dependency.
+* `Lazy` - 注入一个函数,会延迟计算评估依赖.
     * ex. `Lazy.of(HttpClient)`
-* `All` - Injects an array of all services registered with the provided key.
+* `All` - 注入一个提供键值注册的全部服务的数组.
     * ex. `All.of(Plugin)`
-* `Optional` - Injects an instance of a class only if it already exists in the container; null otherwise.
+* `Optional` - 注入一个类的实例当它已经存在于容器中, 反之注入null.
     * ex. `Optional.of(LoggedInUser)`
 
-In addition to these resolvers, you can also use `Registration` decorators to specify the default registration or lifetime for an instance. By default, the DI container assumes that everything is a singleton instance; one instance for the app. However, you can use a registration decorator to change this. Here's an example:
+除了这些解析器外, 你也可以使用 `Registration` 装饰器去特别指定默认的登记, 或者一个实例的生命周期. 默认的, 依赖注入容器假定一切都是单例模式; 整个app就一个实例. 然而, 你可以使用注册装饰器去改变默认行为, 这里是一个例子:
 
 ```javascript
 import {transient, inject} from 'aurelia-framework';
@@ -271,9 +271,9 @@ export class CustomerDetail{
 }
 ```
 
-Now, each time the DI container is asked for an instance of `CustomerDetail` the container will return a new instance, rather than a singleton. `singleton` and `transient` registrations are provided out-of-the-box, but you can create your own by writing a class that implements the following method `register(container, key, fn)`. Then, simply add an instance of it to a class with the `registration` decorator.
+现在, 每次依赖注入容器被请求一个`CustomerDetail`实例, 容器将会返回一个新的实例, 而不是一个单例. `singleton` 和 `transient` 注册方式都系统提供. 但是你可以创建你自己的通过写一个类实现`register(container, key, fn)`方法. 接着, 简单的添加它的实例到这个类通过附带`registration`装饰器.
 
-If you can't or don't want to use decorators, don't worry. We have a fallback mechanism. Simply provide a static `decorators` property or method and then use our chainable `Decorators` helper. The helper has methods for all our decorators, so it's easy for you to use in any language. Here's how the above example could be written in CoffeeScript:
+如果你不能或者不想使用装饰器, 别担心, 我们提供一个备案机制. 简单的提供一个静态的 `decorators` 属性或者方法, 然后使用链式的`Decorators`助手. 这个助手拥有我们全部的装饰器的方法. 所以,对于我们在任何开发语言中都可以很简单的使用. 这里展示的是如何用`CoffeeScript`语言编写上面的例子:
 
 ```coffeescript
 HttpClient = require('aurelia-http-client').HttpClient;
@@ -284,9 +284,9 @@ class CustomerDetail
   @decorators:Decorators.transient().inject(HttpClient);
 ```
 
-<h3 id="parent-vm-reference"><a href="#parent-vm-reference">Parent View Models</a></h3>
+<h3 id="parent-vm-reference"><a href="#parent-vm-reference">父级视图模型(Parent View Models)</a></h3>
 
-By default a View-model's access is limited to injected objects as well as children of the class. Sometimes it may be desirable to refer to objects and methods on a parent View-model, which can be achieved by storing the parent during the _bind_ method of the view lifecycle:
+默认的一个视图模型(`View-model`)的类是限制到被注入的对象中和它的子类一样.有时, 引用一个父视图模型中的对象和方法是值得的, 这样能够达到通过储存父模型在视图生命周期的 _bind_ 方法中.
 
 ```javascript
 class ChildViewModel {
@@ -296,9 +296,9 @@ class ChildViewModel {
 }
 ```
 
-<h2 id="templating"><a href="#templating">Templating</a></h2>
+<h2 id="templating"><a href="#templating">模板(Templating)</a></h2>
 
-Aurelia's templating engine is responsible for loading your views and their required resources, compiling your HTML for optimal performance and rendering your UI to the screen. To create a view, all you need to do is author an HTML file with an `HTMLTemplate` inside. Here's a simple view:
+Aurelia的模板引擎是负责加载力的视图和他们所需的资源, 编译你的HTML为了理想的性能和渲染你的UI到屏幕. 创建一个视图, 全部你所要做的就是创建一个HTML文件,里面要包含一个`HTMLTemplate`, 这里是一个简单的例子:
 
 ```markup
 <template>
@@ -306,7 +306,7 @@ Aurelia's templating engine is responsible for loading your views and their requ
 </template>
 ```
 
-Everything inside the `template` tag will be managed by Aurelia. However, since Aurelia uses HTMLImport technology to load views, you can also include links, and they will be properly loaded, including relative resource resolution semantics. In other words, you can do this:
+所有在`template`标签你的内容都将被Aurelia管理. 然后因为Aurelia使用`HTMLImport`技术加载视图, 你当然也可以包含`links`, 这样它们会被适当的加载, 包含语义上的相对的资源. 换句话说, 你可以这样做: 
 
 ```markup
 <link rel="stylesheet" href="hello.css">
@@ -316,9 +316,9 @@ Everything inside the `template` tag will be managed by Aurelia. However, since 
 </template>
 ```
 
-This enables you to dynamically load per-view style sheets and even Web Components on the fly.
+这样允许你动态的加载每个视图的样式表文件, 甚至于运行时的web组件.
 
-Any time you require an Aurelia-specific resource, such as an Aurelia _Custom Element_, _Custom Attribute_ or _Value Converter_, you should use a `require` element inside your view instead. Here's an example:
+任何时候当你需要一个Aurelia特别指定的资源, 例如一个Aurelia的 _Custom Element_, _Custom Attribute_ 或者 _Value Converter_,你应该替代的使用一个`require`元素在你的视图中. 这里有一个例子:
 
 ```markup
 <template>
@@ -332,18 +332,19 @@ Any time you require an Aurelia-specific resource, such as an Aurelia _Custom El
 </template>
 ```
 
-In this case `nav-bar` is an Aurelia _Custom Element_ which we've required for use. Using Aurelia's `require` element causes the framework's resource pipeline to process the imported item, which has the following advantages:
+这个 `nav-bar` 样例是一个我们需要使用的Aurelia的 _Custom Element_ . 通过使用Aurelia的`require`元素引起框架资源管道式的处理被导入的项目, 这样会有以下好处:
 
-* Deduping - The resource is downloaded once in the app. Even if other views require the same element, it will not be downloaded again.
-* One-time Compilation - Templates for Custom Elements required this way are compiled once for the entire application.
-* Local Scope - The required resource is only visible inside the view that requires it, reducing the likelihood of name conflicts and improving maintainability and understandability by eliminating globals.
-* Renaming - Resources can be renamed during require if two 3rd party resources with the same or similar name need to be used in the same view.
+* 防重(Deduping) - 在整个app资源只下载一次. 甚至于其它视图也需要同样的元素, 它将不会再次下载.
+* 一次性编译(One-time Compilation) - 自定义元素的模板需要这种方式被一次编译对于整个应用.
+* 本地作用域(Local Scope) - 需要的资源仅仅在需要他的视图中可见, 减少名称冲突的可能性,并且提升了可维护性和易懂的特性通过消除全局性.
+* 重命名(Renaming) - 资源能够被重命名当在被两方三方资源通过相同的或者相似的名称在同样的视图中被使用时被应用.
     - ex. `<require from="nav-bar" as="foo-bar"></require>` - Now instead of using a `nav-bar` element you can use a `foo-bar` element. (This is based on ES6 import syntax where renaming is considered a replacement for using an Alias because it strictly renames the type locally.)
-* Packages - The require can point to a module with multiple resources which will all be imported into the same view.
-* Extensibility - You can define new types of resources which, when required in this way, can execute custom loading (async one-time) and registration (once per-view). This is a declarative, extensible resource loading pipeline.
-* ES6 - Code is loaded by the ES6 loader rather than the HTMLImport mechanism, enabling all the features and extensibility of your loader. This design choice fully unifies all app resource loading, whether through JavaScript or HTML.
 
-In your view you will often leverage the different types of resources mentioned above as well as databinding.
+* 封装(Packages) - 需要的资源可以指向一个拥有多个全部将被导入到相同视图的资源模块.
+* 可扩展性(Extensibility) - 你可以顶一个新的资源类型, 当像这种方式被需要, 能够执行自定义加载(async one-time)并且注册(once per-view). 这是声明式,可扩展式的资源加载管道.
+* ES6 - 代码通过ES6被加载, 而不是`HTMLImport`加载机制, 允许全部的特性和你加载方式的扩张性. 这种设计选择完全的统一了所有app资源的加载, 不管是JavaScript或者HTML.
+
+在你的视图中和数据绑定一样你会经常使用不同类型的像上面提到的资源.
 
 >**Note:** You may be concerned about the tediousness of having to import things into each view. Remember, during the bootstrapping phase you can configure Aurelia with global resources to be available in every view. Just use `aurelia.globalizeResources(...resourcePaths)`.
 
