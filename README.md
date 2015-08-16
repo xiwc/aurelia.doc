@@ -95,11 +95,11 @@ aurelia.use.feature('feature-folder-name-here');
 
 <h4 id="promises"><a href="#promises">许诺(Promises)</a></h4>
 
-By default, Aurelia uses ES6 native Promises or a polyfill. However, you can replace this with the excellent [Bluebird](https://github.com/petkaantonov/bluebird) Promise library. Simply include it in your page before you reference the other scripts. It will provide its own standards-compliant Promise implementation which is currently faster than native and has better debugging support. Additionally, when used in combination with the Babel transpiler, you can use [coroutines](http://babeljs.io/docs/usage/transformers/other/bluebird-coroutines/) for improved async code.
+默认的, Aurelia使用ES6原生的许诺(`Promises`)或者一个垫片(`polyfill`). 然而,你可以用优秀的 [Bluebird](https://github.com/petkaantonov/bluebird) 许诺类库来替代. 简单的在你的页面中包含它在引用其它类库之前, 这将提供自己的符合标准的许诺实现,它比原生的更快并且有更好的调试(`debugging`)支持. 另外, 当结合`Babel`转码器使用时, 为了改进异步编码你可以使用[coroutines](http://babeljs.io/docs/usage/transformers/other/bluebird-coroutines/) .
 
-<h3 id="framework-configuration"><a href="#framework-configuration">Framework Configuration</a></h3>
+<h3 id="framework-configuration"><a href="#framework-configuration">框架配置(Framework Configuration)</a></h3>
 
-An instance of the `Aurelia` object is passed to your main `configure` function as shown in the examples above. The `use` property of this object is an instance of `FrameworkConfiguration` which can be used to prepare the framework with plugins, features, global resources, services and more. Also, plugin and feature `configure` methods receive an instance of `FrameworkConfiguration` so that they can configure themselves. Since this configuration API is very important, we provide a brief explanation of it in code below:
+一个`Aurelia`实例对象被传递给你主要的`configure`函数像上面的例子展示. 这个对象的`use`属性是一个可以用作准备框架的插件(`plugins`),功能(`features`),全局资源(`global resources`),服务(`services`)和其他更多的`FrameworkConfiguration`实例. 并且, 插件和功能`configure`函数接受一个`FrameworkConfiguration`实例参数以便它们可以配置自身. 因为这个配置API很重要, 我们在下面的代码中提供一个简要的解释.
 
 ```javascript
 export class FrameworkConfiguration {
@@ -185,15 +185,15 @@ export class FrameworkConfiguration {
 }
 ```
 
-<h2 id="views-and-view-models"><a href="#views-and-view-models">Views and View Models</a></h2>
+<h2 id="views-and-view-models"><a href="#views-and-view-models">视图和视图模型(Views and View Models)</a></h2>
 
-In Aurelia, user interface elements are composed of _view_ and _view-model_ pairs. The _view_ is written with HTML and is rendered into the DOM. The _view-model_ is written with JavaScript and provides data and behavior to the _view_. The templating engine and/or DI are responsible for creating these pairs and enforcing a predictable lifecycle for the process. Once instantiated, Aurelia's powerful _databinding_ links the two pieces together allowing changes in your data to be reflected in the _view_ and vice versa. This Separation of Concerns is great for developer/designer collaboration, maintainability, architectural flexibility, and even source control.
+在Aurelia中, 用户接口元素是 _view_ 和 _view-model_ 成对结合的.  _view_ 是HTML编写, 会被渲染到DOM.  _view-model_ 是JavaScript编写, 提供到 _view_ 的数据和行为. 模板引擎和依赖注入(`DI`)负责创建这些视图和视图模型对, 增强处理过程中的可预见的什么周期. 一旦实例化, Aurelia强大的 _databinding_ 连接这两个部件在一起, 允许在你数据的变化反映到 _view_ ,反之亦然. 这种关注点的分离对开发者和设计者的合作是很赞的. 可维护性, 结构灵活, 甚至源码控制.
 
-<h3 id="dependency-injection"><a href="#dependency-injection">Dependency Injection (DI)</a></h3>
+<h3 id="dependency-injection"><a href="#dependency-injection">依赖注入(Dependency Injection (DI))</a></h3>
 
-View-models and other interface elements, such as Custom Elements and Custom Attributes, are created as classes which are instantiated by the framework using a dependency injection container. Code written in this style is easy to modularize and test. Rather than creating large classes, you can break things down into small objects that collaborate to achieve a goal. The DI can then put the pieces together for you at runtime.
+视图模型和其他的接口元素, 例如自定义元素和自定义属性, 以类`classes`的形式创建, 被框架使用依赖注入容器实例化. 用这种编码书写很容易模块化和测试. 相比较创建庞大的类(`classes`), 你可以分割成小的对象合作去达到一个目标. 依赖注入可以在运行时(`runtime`)把这些部件组织在一起. 
 
-In order to leverage DI, you simply decorate your class to tell the framework what it should pass to its constructor. Here's an example of a view-model that depends on Aurelia's fetch client.
+为了使用依赖注入, 你简单的装饰你的类,去告知框架什么应该传递到它的构造函数`constructor`. 这里是一个视图模型的简单例子, 它依赖Aurelia的`fetch client`.
 
 ```javascript
 import {inject} from 'aurelia-framework';
