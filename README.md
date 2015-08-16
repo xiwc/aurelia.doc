@@ -187,7 +187,7 @@ export class FrameworkConfiguration {
 
 <h2 id="views-and-view-models"><a href="#views-and-view-models">视图和视图模型(Views and View Models)</a></h2>
 
-在Aurelia中, 用户接口元素是 _view_ 和 _view-model_ 成对结合的.  _view_ 是HTML编写, 会被渲染到DOM.  _view-model_ 是JavaScript编写, 提供到 _view_ 的数据和行为. 模板引擎和依赖注入(`DI`)负责创建这些视图和视图模型对, 增强处理过程中的可预见的什么周期. 一旦实例化, Aurelia强大的 _databinding_ 连接这两个部件在一起, 允许在你数据的变化反映到 _view_ ,反之亦然. 这种关注点的分离对开发者和设计者的合作是很赞的. 可维护性, 结构灵活, 甚至源码控制.
+在Aurelia中, 用户接口元素是 _view_ 和 _view-model_ 成对结合的.  _view_ 是HTML编写, 会被渲染到DOM.  _view-model_ 是JavaScript编写, 提供到 _view_ 的数据和行为. 模板引擎和依赖注入(`DI`)负责创建这些视图和视图模型对, 增强处理过程中的可预见的生命周期. 一旦实例化, Aurelia强大的 _databinding_ 连接这两个部件在一起, 允许在你数据的变化反映到 _view_ ,反之亦然. 这种关注点的分离对开发者和设计者的合作是很赞的. 可维护性, 结构灵活, 甚至源码控制.
 
 <h3 id="dependency-injection"><a href="#dependency-injection">依赖注入(Dependency Injection (DI))</a></h3>
 
@@ -207,7 +207,7 @@ export class CustomerDetail{
 }
 ```
 
-With ES2016 or TypeScript Decorators enabled, you just add the `inject` decorator, passing one argument per injected type. If you aren't using a language that supports Decorators, or just don't want to use them, you can also add a static property or method to your class named `inject`. This must return an array of injectable types. Here's the same example in CoffeeScript with CommonJS modules:
+如果`ES2016`和`TypeScript`装饰器开启的话, 你仅仅添加`inject`装饰器, 每个注入类型传递一个参数. 如果没有使用支持装饰(`Decorators`)的开发语言, 或者就不想去使用, 你也可以添加一个静态(`static`)的属性或者方法到你的命名为`inject`的类. 它必须返回一个可注入类型的数组. 这里是一个简单的`CoffeeScript`写的`CommonJS modules`的例子.
 
 ```coffeescript
 HttpClient = require('aurelia-fetch-client').HttpClient;
@@ -217,7 +217,7 @@ class Flickr
   @inject:[HttpClient]
 ```
 
-If you are working with TypeScript, you can use the `--emitDecoratorMetadata` compiler flag along with Aurelia's `@autoinject` decorator to enable the framework to read the standard TS type information. As a result, there's no need to duplicate the types. Here's what that looks like:
+如果你正在使用`TypeScript`, 你可以使用 `--emitDecoratorMetadata` 编译标志位伴随着Aurelia的`@autoinject`装饰器,允许框架读取标准的`TS`类型信息. 这样的话, 就没有必要去重复类型. 这里是看起来的样子:
 
 ```javascript
 import {autoinject} from 'aurelia-framework';
@@ -231,9 +231,9 @@ export class CustomerDetail {
 }
 ```
 
-> **Note:** There's an interesting detail of the way that TypeScript implements this compilation option. It actually works with any decorator. So, if you've got other decorators on your TS class, there's no need to include the `autoinject` decorator. The Type information will still be discoverable by Aurelia's dependency injection framework.
+> **注意:** 这里`TypeScript`实现编译选项的方式有一个有意思的细节. 它实际上可以和其他装饰器一起工作. 所以, 如果你已经在你的`TS`类使用其他装饰器, 就没有必要再包含 `autoinject` 装饰器. 类型信息仍然会被Aurelia的依赖注入矿建自动发现.
 
-When explicitly declaring dependencies, it's important to know that they don't have to be just constructor types. They can also be instances of `resolvers`. For example, have a look at this:
+但明确声明依赖项, 重要的是要知道它们不需要必须是构造类型, 它们也可以是`resolvers`实例. 例如, 看看这里: 
 
 ```javascript
 import {Lazy, inject} from 'aurelia-framework';
