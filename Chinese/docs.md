@@ -1,4 +1,4 @@
-# 文档
+# 文档(Docs)
 
 我们为`Aurelia`框架准备了一个非常丰富的计划文档.不幸的是,我们还没有完成。然而,对于早期预览期间,我们把文档组织在一块,包含了你或许想要执行的最常见的例子。如果你有问题,我们希望你能加入我们(gitter频道)(https://gitter.im/aurelia/discuss)。
 
@@ -27,7 +27,7 @@ Aurelia起初是为常见的浏览器设计的. 包括 `Chrome`,`Firefox`,`IE11`
 > **注意:** `WeakMap`不是Aurelia本身需要,而是`MutationObserver polyfill`要使用.
 
 
-<h2 id="startup-and-configuration"><a href="#startup-and-configuration">开始 & 配置</a></h2>
+<h2 id="startup-and-configuration"><a href="#startup-and-configuration">开始 & 配置(Startup & Configuration)</a></h2>
 
 很多代码执行平台有一个`main`或者一个入口. Aurelia也是这样. 如果你已经阅读过[Get Started](/get-started.html) 页面, 离就会发现`aurelia-app`属性. 就这样简单的放置到HTML元素上后Aurelia引导程序就会加载 _app.js_ 和 _app.html_, 将他们绑定到一起,并且将他们注入到你放置那个属性的DOM元素上.
 
@@ -67,13 +67,13 @@ export function configure(aurelia) {
 }
 ```
 
-<h3 id="logging"><a href="#logging">日志</a></h3>
+<h3 id="logging"><a href="#logging">日志(Logging)</a></h3>
 
 Aurelia有一个简单的框架自己使用的日志抽象. 默认它是没有操作的. 上面的配置展示了怎样安装一个获取日志数据并且输出它到控制台的输出源(`appender`). 你也可以设置日志的输出级别. `logLevel`可能的枚举值包括: `none`, `error`, `warn`, `info` 和 `debug`.
 
 你可以方便的创建自己的日志输出源, 简单的实现一个匹配日志输出源接口的类. 最好的方式是去看看我们的实现 [console log appender's source](https://github.com/aurelia/logging-console/blob/master/src/index.js).
 
-<h3 id="plugins"><a href="#plugins">插件</a></h3>
+<h3 id="plugins"><a href="#plugins">插件(Plugins)</a></h3>
 
 一个 _插件_ 仅仅就是一个导出`configure`函数的模块. 在启动期间Aurelia会加载所有的插件模块然后调用它们的`configure`函数, 传递给它们`FrameworkConfiguration`实例以便它们可以适当的配置框架, 插件可以可选的从它们的`configure`函数返回一个`Promise`对象以便执行异步配置任务. 当写一个插件, 要确保明确的提供全部的元数据(`metadata`), 包括一个为了自定义元素的视图策略(`View Strategy`).
 
@@ -85,15 +85,15 @@ aurelia.use.plugin('plugin-name', config => { /* configuration work */ });
 
 > **注意:** 不要在插件内依赖命名约定. 因为你不清楚插件的使用者会怎样改变Aurelia的约定. 第三方的插件应该明确为了它们的功能在不同的上下文中正确.
 
-<h4 id="features"><a href="#features">特性插件</a></h4>
+<h4 id="features"><a href="#features">特性插件(Feature Plugins)</a></h4>
 
-The above plugin API is designed to enable the installation of external, 3rd party plugins. However, you may wish to organize your own project as a series of plugins. To do this, simply create a folder for your internal "feature" plugin. In that folder create an `index.js` file that exports a single `configure` function. This function works the same as 3rd party plugins. To register your feature for configuration at startup, you would use the following code:
+上面的插件接口(`API`)是为安装外部的三方的插件设计的. 然而, 我或许想组织你自己项目里的一系列插件, 为了这样做, 为你自己的内部`功能`(`feature`)插件简单的创建一个文件夹, 在文件夹中创建一个`index.js`文件导出一个单一的`configure`函数, 这个函数像三方插件一样工作, 在启动的时候注册你的功能, 你将使用下面的代码:
 
 ```javascript
 aurelia.use.feature('feature-folder-name-here');
 ```
 
-<h4 id="promises"><a href="#promises">Promises</a></h4>
+<h4 id="promises"><a href="#promises">许诺(Promises)</a></h4>
 
 By default, Aurelia uses ES6 native Promises or a polyfill. However, you can replace this with the excellent [Bluebird](https://github.com/petkaantonov/bluebird) Promise library. Simply include it in your page before you reference the other scripts. It will provide its own standards-compliant Promise implementation which is currently faster than native and has better debugging support. Additionally, when used in combination with the Babel transpiler, you can use [coroutines](http://babeljs.io/docs/usage/transformers/other/bluebird-coroutines/) for improved async code.
 
