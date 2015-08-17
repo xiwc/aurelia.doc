@@ -346,9 +346,9 @@ Aurelia的模板引擎是负责加载力的视图和他们所需的资源, 编�
 
 在你的视图中和数据绑定一样你会经常使用不同类型的像上面提到的资源.
 
->**Note:** You may be concerned about the tediousness of having to import things into each view. Remember, during the bootstrapping phase you can configure Aurelia with global resources to be available in every view. Just use `aurelia.globalizeResources(...resourcePaths)`.
+> ** 注意:** 你或许觉得不得不导入资源到每个视图会很乏味, 在启动引导的阶段里可以配置Aurelia的全局资源对每个视图可见. 仅仅使用 `aurelia.globalizeResources(...resourcePaths)`.
 
-Aurelia polyfills browsers that don't support templates. However, a few features of templates can't be polyfilled and require workarounds. In particular this occurs when adding `<template>` elements inside `<select>` and `<table>` elements. The following can't be done in a browser that doesn't natively support templates:
+Aurelia垫片浏览器不支持模板. 然而, 一些模板的特性不能被填充垫片, 需要特性的环境. 特别要提的是这发生在添加`<template>`元素到 `<select>` 和 `<table>` 元素中. 接下来的例子不能在不能原生支持模板的浏览器中使用:
 
 ```markup
   <table>
@@ -360,7 +360,7 @@ Aurelia polyfills browsers that don't support templates. However, a few features
   </table>
 ```
 
-In order to repeat over the `<tr>` elements, simply add the `repeat` on the `<tr>` itself:
+为了循环重复`<tr>`元素, 可以简单的添加`repeat`到`<tr>`自己的身上.
 
 ```markup
   <table>
@@ -370,15 +370,15 @@ In order to repeat over the `<tr>` elements, simply add the `repeat` on the `<tr
   </table>
 ```
 
-<h3 id="databinding"><a href="#databinding">Databinding</a></h3>
+<h3 id="databinding"><a href="#databinding">数据绑定(Databinding)</a></h3>
 
-Databinding allows you to link the state and behavior in a JavaScript object to an HTML view. When this link is established, any changes in linked properties can be synced in one or both directions. Changes in the JavaScript object can be reflected in the view and changes in the view can be reflected in the JavaScript object. To establish this link, you will leverage "binding commands" in your HTML. Binding commands are clearly identifiable via their use of the "." as a kind of binding operator. Whenever an HTML attribute contains a ".", the compiler will pass the attribute name and value off to the binding language for interpretation. The result is one or more binding expressions that are capable of establishing the linkage when the view is created.
+数据绑定(`Databinding`)允许你链接状态和行为在一个JavaScript对象和一个HTML视图中. 当这种链接被建立, 任何链接属性的改变会被单向或者双向的同步. 在JavaScript对象中的变化能够被反映到视图, 并且在视图中的变化会被反映到JavaScript对象中. 建立这种链接, 你需要在HTML中使用"binding commands", 绑定命令通过使用中绑定操作符`"."`清楚的的被识别. 任何时候HTML属性包含一个`"."`, 编译器会传递属性名和值给绑定开发语言去解析. 结果就是一个或者更多绑定表达式有能力的建立这种链接关系在视图创建后.
 
-You can extend the system with your own binding commands, but Aurelia provides a collection to cover the most common use cases.
+你可以用自己的绑定命令扩展系统指令, 然而,Aurelia已经提供了一系列的指令覆盖了大多常用的使用情形.
 
-<h4 id="binding-modes"><a href="#binding-modes">bind, one-way, two-way & one-time</a></h4>
+<h4 id="binding-modes"><a href="#binding-modes">绑定, 单向, 双向, 一次性(bind, one-way, two-way & one-time)</a></h4>
 
-The most common binding command is `.bind`. This will cause the property to be bound using a "one-way" binding for all attributes, except form element values, which are bound with a "two-way" binding.
+最常见的绑定命令是`.bind`. 这将导致的结果是,除了表单(`form`)元素会使用双向(`"two-way"`)绑定外, 其他全部的属性绑定将会使用单向(`"one-way"`)绑定.
 
 _What does this mean though?_
 
