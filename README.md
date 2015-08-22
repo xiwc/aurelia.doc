@@ -380,101 +380,103 @@ Aurelia垫片浏览器不支持模板. 然而, 一些模板的特性不能被填
 
 最常见的绑定命令是`.bind`. 这将导致的结果是,除了表单(`form`)元素会使用双向(`"two-way"`)绑定外, 其他全部的属性绑定将会使用单向(`"one-way"`)绑定.
 
-_What does this mean though?_
+_思考下这意味着什么?_
 
-One-way binding means that changes flow from your JavaScript view-models into the view, not from the view into the view-model. Two-way binding means that changes flow in both directions. `.bind` attempts to use a sensible default by assuming that if you are binding to a form element's value property then you probably wish the changes made in the form to flow into your view-model. For everything else it uses one-way binding, especially since, in many cases, two-way binding to non-form elements would be nonsensical. Here's a small binding example using `.bind`:
+
+单向数据绑定意思是JavaScript视图模型中的改变反映到视图中, 但是视图的改变不会反映到视图模型中. 双向数据绑定意思是改变的映射是双向的. `.bind`会使明智的使用默认行为, 如果你绑定到一个表单`form`元素的值`value`属性, 并且你可能希望表单的改变反映到你的视图模型中. 对于其他的情形会使用单向数据绑定, 特别的原因是,在大多数情形, 双向数据绑定对于非表单元素是没有意义的. 这里是一个小的使用`.bind`的数据绑定的例子:
 
 ```markup
 <input type="text" value.bind="firstName">
 <a href.bind="url">Aurelia</a>
 ```
 
-In the above example, the `input` will have its `value` bound to the `firstName` property on the view-model. Changes in the `firstName` property will update the `input.value` and changes in the `input.value` will update the `firstName` property. On the other hand, the `a` tag will have its `href` bound to the `url` property on the view-model. Only changes in the `url` property will flow into the `href` of the `a` tag, not the other way.
+在上面的例子中, `input`会绑定它的`value`到视图模型的`firstName`属性上. 改变`firstName`属性将会更新`input.value`, 并且改变`input.value`也会更新`firstName`属性. 另一方面, `a`将会绑定它的`href`到视图模型的`url`属性. 一旦`url`属性改变, 就会反映到`a`的`href`上, 而另一个方向不会.
 
-You can always be explicit and use `.one-way` or `.two-way` in place of `.bind` though. A common case where this is required is with Web Components that function as input-type controls. So, you can imagine doing something like this:
+你可以一直明确的使用`.one-way`或者`.two-way`来代替`.bind`. 一个常见的使用情形是, 当被Web组件需要作为输入类型功能的组件. 所以你可以假想做下面的事情: 
 
 ```markup
 <markdown-editor value.two-way="markdown"></markdown-editor>
 ```
 
-In order to optimize performance and minimize CPU and memory usage, you can alternatively leverage the `.one-time` binding command to flow data from the view-model into the view "one time". This will happen during the initial binding phase, after which, no synchronization will occur.
+为了优化性能和减少CPU和内存的使用率, 你可以有选择的使用`one-time`绑定命令, 去反映视图模型中的数据改变到视图中,仅仅是一次性的. 这将发生在初始化绑定阶段, 在此之后, 不会再发生同步.
 
-<h4 id="event-modes"><a href="#event-modes">delegate, trigger & call</a></h4>
+<h4 id="event-modes"><a href="#event-modes">代理, 触发器, 呼叫(delegate, trigger & call)</a></h4>
 
-Binding commands don't only connect properties and attributes, but can be used to trigger behavior. For example, if you want to invoke a method on the view-model when a button is clicked, you would use the `trigger` command like this:
+绑定命令不仅仅连接视图模型属性到视图元素属性, 而且可以被用来触发行为. 例如, 如果你想调用一个视图模型中的方法在按钮被点击后, 你可以使用`trigger`命令像下面这样: 
 
 ```markup
 <button click.trigger="sayHello()">Say Hello</button>
 ```
 
-When the button is clicked, the `sayHello` method on the view-model will be invoked. That said, adding event handlers to every single element like this isn't very efficient, so often times you will want to use event delegation. To do that, use the `.delegate` command. Here's the same example but with event delegation instead:
+当按钮被点击, 视图模型中的`sayHello`方法会被调用. 也就是说, 像这样添加事件处理函数到每一个单独的元素上不是很高效的, 所以经常你会想使用事件代理. 使用`.delegate`命令来完成代理. 下面是一个简单的使用事件代理的例子:
 
 ```markup
 <button click.delegate="sayHello()">Say Hello</button>
 ```
 
-The `$event` property can be passed as an argument to a delegate/trigger function call if you need to access the event object.
+`$event`属性可以作为一个参数传递到一个delegate/trigger函数调用中, 如果你需要访问事件的对象.
+
 
 ```markup
 <button click.delegate="sayHello($event)">Say Hello</button>
 ```
 
-> **Note:** If you aren't familiar with event delegation, it's a technique that uses the bubbling nature of DOM events. When using `.delegate`, a single event handler is attached to the document, rather than on each element. When the element's event is fired, it bubbles up the DOM until it reaches the document, where it is handled. This is a more memory efficient way of handling events and it's recommended to use this as your default mechanism.
+>  **注意:** 如果你不熟悉事件代理, 它是使用DOM事件的冒泡特性. 当使用`.delegate`时, 一个单独的事件处理函数被附加到文档对象上, 而不是附加到每一个元素上. 当元素事件被触发, 它会冒泡DOM树直到它到达文档对象, 在那里它会被处理. 这是更高内存利用率的事件处理方式, 并且这是被推荐使用.
 
-> **Note:** Event delegation does not work from inside a *closed* ShadowDOM. It will work from within an open ShadowDOM with no trouble though.
+>  **注意:** 在一个*closed* ShadowDOM中事件代理是不起作用的. 它可以毫无顾虑的在一个open ShadowDOM中起作用.
 
-All of this works against DOM events in some way or another. Occasionally you may have an Aurelia Custom Attribute or Element that wants a reference to your function directly so that it can invoke it manually at a later time. To pass a function reference, use the `.call` binding (since the attribute will _call_ it later):
+在DOM事件中这大都是正常工作的. 偶尔你或许有一个Aurelia自定义属性或者元素想直接引用你的一个函数, 以便于在晚点可以手动的调用. 要传递一个函数引用, 使用`.call`绑定(因为这个属性会将来被 _call_):
 
 ```markup
 <button touch.call="sayHello()">Say Hello</button>
 ```
 
-Now the Custom Attribute `touch` will get a function that it can call to invoke your `sayHello()` code. Depending on the nature of the implementor, you may be able to receive data from the caller. This works the same as with trigger/delegate by providing an `$event` object.
+现在这个自定义的属性`touch`引用一个函数,让它可以调用你的`sayHello`函数代码. 依赖于者天然的实现, 你可以从调用者接受数据. 它像trigger/delegate一样工作, 可以提供一个 `$event`对象参数.
 
-<h4 id="string-interpolation"><a href="#string-interpolation">string interpolation</a></h4>
+<h4 id="string-interpolation"><a href="#string-interpolation">字符串插入(string interpolation)</a></h4>
 
-Sometimes you need to bind properties directly into the content of the document or interleave them within an attribute value. For this, you can use the string interpolation syntax `${expression}`. String interpolation is a one-way binding, the output of which is converted to a string. Here's an example:
+有时你需要直接绑定属性到文档的内容中, 或者间插它们到属性值中. 为了这样, 你可以使用字符串插入语法`${expression}`. 字符串插入是单向绑定, 输出被转换层字符串. 下面是一个例子: 
 
 ```markup
 <span>${fullName}</span>
 ```
 
-The `fullName` property will be interpolated directly into the span's content. You can also use this to handle css class bindings like so:
+`fullName`属性会被直接内嵌到span的内容中. 你也可以使用它处理css class的绑定, 像这样:
 
 ```markup
 <div class="dot ${color} ${isHappy ? 'green' : 'red'}"></div>
 ```
 
-In this snippet "dot" is a statically present class and "green" is present only if `isHappy` is true, otherwise the "red" class is present. Additionally, whatever the value of `color` is...that is added as a class.
+在这个代码片段中"dot"是一个静态呈现的class, "green" class被呈现仅仅当`isHappy`为true, 否则"red" class会被呈现. 另外的, 不管`color`是什么值, 它都会被添加作为一个class.
 
-> **Note:** You can use simple expressions inside your bindings. Don't try to do anything too fancy. You don't want code in your view. You only want to establish the linkage between the view and its view-model.
+> **注意:** 你可以使用简单的表达式在你的绑定中. 不要尝试太过花哨的做法, 你不想在视图中编码. 你仅仅想建立视图到视模型的连接.
 
-<h4 id="ref"><a href="#ref">ref</a></h4>
+<h4 id="ref"><a href="#ref">引用(ref)</a></h4>
 
-In addition to commands and interpolation, the binding language recognizes the use of a special attribute: `ref`. By using `ref` you can create a local name for an element which can then be referenced in another binding expression. It will also be set as a property on the view-model, so you can access it through code. Here's a neat example of using `ref`:
+除了命令和插入, 绑定语言赞成使用特性的属性: `ref`. 通过使用`ref`你可以为一个元素创建一个本地的名称, 以便于它可以在其他的绑定表达式中被应用. 它也可以做设置为视图模型的一个属性., 以便于你可以通过代码访问它. 下面是一个巧妙使用`ref`的例子:
 
 ```markup
 <input type="text" ref="name"> ${name.value}
 ```
 
-You can also use `ref` as a binding command to get the view-model instance that backs an Aurelia Custom Element or Custom Attribute. By using this technique, you can connect different components to each other:
+你也可以使用`ref`绑定命令获取Aurelia自定义元素或者属性背后的视图模型实例. 通过使用这种技术, 你可以相互连接不同组件:
 
 ```markup
 <producer producer.ref="producerVM"></producer>
 <consumer input.bind="producerVM.output"></consumer>
 ```
 
-`producer.ref="producerVM"` creates an alias to the view-model for the `producer` custom element which you can then use elsewhere to pass to another custom element or to use properties of the VM. Thus in the second line of the code above, `consumer` has a property called `input` that has been bound to the `output` property of the VM of the `producer`. There are a few ways to use `ref` to reference elements and view-models:
+`producer.ref="producerVM"`创建`producer`自定义元素的视图模型的一个别名, 以便于可以在其他地方使用, 传递给另外的自定义元素, 或者使用视图模型的属性. 因此在上面例子的第二行, `consumer`有一个叫`input`的属性绑定到`producer`视图模型的`output`属性上. 有一些不同的方式在引用元素和视图模型中使用`ref`:
 
-* `attribute-name.ref="someIdentifier"`- create a reference to a custom attribute's class instance
-* `element-name.ref="someIdentifier"`- create a reference to a custom element's class instance
-* `ref="someIdentifier"` - create a reference to the HTMLElement in the DOM
+* `attribute-name.ref="someIdentifier"`- 创建一个自定义属性类实例的引用
+* `element-name.ref="someIdentifier"`- 创建一个自定义元素类实例的引用
+* `ref="someIdentifier"` - 创建一个DOM树中的HTMLElement的引用
 
-<h4 id="select-elements"><a href="#select-elements">select elements</a></h4>
+<h4 id="select-elements"><a href="#select-elements">选择元素(select elements)</a></h4>
 
-`value.bind` on an HTMLSelectElement has special behavior to support the element's single and multi-select modes as well as binding to objects.
+`value.bind`在HTMLSelectElement上有者特别的行为, 为支持元素的单选和多选模式绑定到对象.
 
-A typical select element is rendered using a combination of `value.bind` and `repeat`, like this:
+一个典型的被渲染的选择元素使用`value.bind` 和 `repeat`组合是像这样:
 
 ```markup
 <select value.bind="favoriteColor">
@@ -483,7 +485,7 @@ A typical select element is rendered using a combination of `value.bind` and `re
 </select>
 ```
 
-Sometimes you want to work with object instances rather than strings.  Here's the markup for building a select element from a theoretical array of employee objects:
+有时,你想绑定对象实例而不是字符串. 下面是一个构建选择元素的标记, 它使用假设的employee对象数组:
 
 ```markup
 <select value.bind="employeeOfTheMonth">
@@ -492,11 +494,11 @@ Sometimes you want to work with object instances rather than strings.  Here's th
 </select>
 ```
 
-The primary difference between this example and the previous example is we're storing the option values in a special property, `model`, instead of the option element's `value` property which only accepts strings.
+这个例子和上个例子主要的不同点是, 我们保存选项的值在一个特性的属性`model`中, 代替仅仅能够接受字符串的选项元素的`value`属性.
 
-<h4 id="multi-select-elements"><a href="#multi-select-elements">multi select elements</a></h4>
+<h4 id="multi-select-elements"><a href="#multi-select-elements">多选元素(multi select elements)</a></h4>
 
-You can bind the select element's value to an array property in multi-select scenarios.  Here's how you'd bind an array of strings, `favoriteColors`:
+你可以绑定多选元素的值到一个数组属性中在一个多选场景中. 下面是你怎么绑定到一个字符串数组`favoriteColors`:
 
 ```markup
 <select value.bind="favoriteColors" multiple>
@@ -504,7 +506,7 @@ You can bind the select element's value to an array property in multi-select sce
 </select>
 ```
 
-This works with arrays of objects as well:
+这同样可以工作于对象数组:
 
 ```markup
 <select value.bind="favoriteEmployees" multiple>
