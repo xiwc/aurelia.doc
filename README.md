@@ -514,11 +514,11 @@ _思考下这意味着什么?_
 </select>
 ```
 
-<h4 id="radios"><a href="#radios">radios</a></h4>
+<h4 id="radios"><a href="#radios">(单选)radios</a></h4>
 
-`checked.bind` on an HTMLInputElement has special behavior to support binding non-boolean values such as strings and objects.
+HTMLInputElement上的`checked.bind`有一个特别的行为, 它支持非boolean类型的值, 例如字符串和对象.
 
-A typical radio button group is rendered using a combination of `value.bind` and `repeat`, like this:
+一个典型的单选按钮组使用`value.bind` 和 `repeat`组合来渲染, 像下面这样:
 
 ```markup
 <label repeat.for="color of colors">
@@ -527,7 +527,7 @@ A typical radio button group is rendered using a combination of `value.bind` and
 </label>
 ```
 
-Sometimes you want to work with object instances rather than strings.  Here's the markup for building a radio button group from a theoretical array of employee objects:
+有时你想使用对象实例而不是字符串, 下面是一个使用假想的employee对象数组构建单选按钮组的标记:
 
 ```markup
 <label repeat.for="employee of employees">
@@ -536,9 +536,9 @@ Sometimes you want to work with object instances rather than strings.  Here's th
 </label>
 ```
 
-The primary difference between this example and the previous example is we're storing the input values in a special property, `model`, instead of the input element's `value` property which only accepts strings.
+这个例子和先前的例子主要不同点是, 我们储存input的值在一个特别的属性(`model`)上, 替代仅仅接受字符串的input元素的`value`属性.
 
-You can also bind a radio group to a boolean property like this:
+你也可以绑定一个单选组到一个boolean属性, 像这样:
 
 ```markup
 <label><input type="radio" name="tacos" model.bind="null" checked.bind="likesTacos" />Unanswered</label>
@@ -546,9 +546,9 @@ You can also bind a radio group to a boolean property like this:
 <label><input type="radio" name="tacos" model.bind="false" checked.bind="likesTacos" />No</label>
 ```
 
-<h4 id="checkboxes"><a href="#checkboxes">checkboxes</a></h4>
+<h4 id="checkboxes"><a href="#checkboxes">复选(checkboxes)</a></h4>
 
-To better support multi-select scenarios Aurelia enables binding an input element's checked property to an array.  Here's how you'd bind an array of strings, `favoriteColors`:
+为了更好的支持多选场景, Aurelia允许绑定一个input元素的checked属性到一个数组. 下面展示绑定到一个字符串数组`favoriteColors`:
 
 ```markup
 <label repeat.for="color of colors">
@@ -557,7 +557,7 @@ To better support multi-select scenarios Aurelia enables binding an input elemen
 </label>
 ```
 
-This works with arrays of objects as well:
+对于对象数组也就是可以工作的:
 
 ```markup
 <label repeat.for="employee of employees">
@@ -566,7 +566,7 @@ This works with arrays of objects as well:
 </label>
 ```
 
-You can of course bind each checkboxes to it's boolean properties like this:
+你也可以绑定每一个checkboxes到它的boolean属性, 像这样:
 
 ```markup
 <li><label><input type="checkbox" checked.bind="wantsFudge" />Fudge</label></li>
@@ -574,23 +574,25 @@ You can of course bind each checkboxes to it's boolean properties like this:
 <li><label><input type="checkbox" checked.bind="wantsCherry" />Cherry</label></li>
 ```
 
-<h4 id="innerhtml"><a href="#innerhtml">innerHTML</a></h4>
+<h4 id="innerhtml"><a href="#innerhtml">内嵌HTML(innerHTML)</a></h4>
 
-You can bind an element's `innerHTML` property using the `innerhtml` attribute:
+你能够绑定一个元素的`innerHTML`属性:
 
 ``` markup
 <div innerhtml.bind="htmlProperty"></div>
 <div innerhtml="${htmlProperty}"></div>
 ```
 
-Aurelia provides a simple html sanitization converter that can be used like this:
+Aurelia提供一个简单的html清洁处理转换, 像下面这样:
+
 
 ``` markup
 <div innerhtml.bind="htmlProperty | sanitizeHtml"></div>
 <div innerhtml="${htmlProperty | sanitizeHtml}"></div>
 ```
 
-You're encouraged to use a more complete html sanitizer such as [sanitize-html](https://www.npmjs.com/package/sanitize-html).  Here's how you would build a converter using this package:
+我们鼓励使用更加完整的html清洁处理, 例如[sanitize-html](https://www.npmjs.com/package/sanitize-html). 下面教你怎么使用它构建转换器:
+
 
 ``` bash
 jspm install npm:sanitize-html
@@ -608,24 +610,25 @@ export class MySanitizeHtmlValueConverter {
 
 > NOTE:  Binding using the `innerhtml` attribute simply sets the element's `innerHTML` property.  The markup does not pass through Aurelia's templating system.  Binding expressions and require elements will not be evaluated.  A solution for this scenario is being tracked in [aurelia/templating#35](https://github.com/aurelia/templating/issues/35).
 
-<h4 id="textcontent"><a href="#textcontent">textContent</a></h4>
+<h4 id="textcontent"><a href="#textcontent">文本内容(textContent)</a></h4>
 
-You can bind an element's `textContent` property using the `textcontent` attribute:
+你可以绑定元素的`textContent`属性:
+
 
 ``` markup
 <div textcontent.bind="stringProperty"></div>
 <div textcontent="${stringProperty}"></div>
 ```
 
-Two-way data-binding is supported with `contenteditable` elements:
+在`contenteditable`元素上支持双向数据绑定:
 
 ``` markup
 <div textcontent.bind="stringProperty" contenteditable="true"></div>
 ```
 
-<h4 id="style"><a href="#style">style</a></h4>
+<h4 id="style"><a href="#style">样式(style)</a></h4>
 
-You can bind a css string or object to an element's `style` attribute:
+你可以绑定一个css字符串或者对象到一个元素的`style`属性:
 
 ``` javascript
 export class Foo {
@@ -645,7 +648,7 @@ export class Foo {
 <div style.bind="styleObject"></div>
 ```
 
-Use the `style` attribute's alias, `css` when doing string interpolation to ensure your application is compatible with Internet Explorer:
+使用`style`属性的别名`css`, 使用字符串篡改保证你的引用兼容Internet Explorer:
 
 ``` markup
 <!-- good: -->
