@@ -658,15 +658,16 @@ export class Foo {
 <div style="width: ${width}px; height: ${height}px;"></div>
 ```
 
-<h4 id="adaptive-binding"><a href="#adaptive-binding">Adaptive Binding</a></h4>
+<h4 id="adaptive-binding"><a href="#adaptive-binding">适配的绑定(Adaptive Binding)</a></h4>
 
-Aurelia has an adaptive binding system that chooses from a number of strategies when determining how to most efficiently observe changes.  For more info on how this works checkout [this post](http://blog.durandal.io/2015/04/03/aurelia-adaptive-binding/).  For the most part you don't need to think about these details however it does help to be aware of scenarios that lead to inefficient use of the binding system.
+Aurelia会从若干策略中选择一个适配的绑定系统当决定怎样去最有效的观察监测变化. 想了解更多的关于他的工作机制, 检出[this post](http://blog.durandal.io/2015/04/03/aurelia-adaptive-binding/). 对于大多数情况你不需要考虑这方面的细节, 然而它可以帮助你发现导致低效使用的绑定系统.
 
-**The #1 thing to be aware of is that computed properties (properties with getter functions) are observed using dirty-checking.**  More efficient strategies such as Object.observe and property rewriting are not compatible with these types of properties.
+**第一条要意识到的是,计算的属性(属性的getter方法)是使用脏检查机制观察监测.** 更加有效率的策略, 例如Object.observe和属性重写是不兼容对于这些类型的属性.
 
-In today's browser environment dirty-checking is a necessary evil.  Very few browsers support Object.observe at the time of this writing.  Aurelia's dirty-checking mechanism is similar to that used in [Polymer](https://www.polymer-project.org/).  It's very efficient and utilizes Aurelia's micro-task-queue to batch updates to the DOM.
 
-A few bindings using dirty-checking will not cause performance problems in your application.  Extensive use of dirty-checking may.  Fortunately there's a way you can avoid dirty-checking simple computed properties.  Consider the 'fullName' property in the example below:
+在今天的浏览器环境dirty-checking是个被需要的坏孩子. 很少的浏览器支持Object.observe在当前文档写作的时候. Aurelia的dirty-checking机制是类似于使用[Polymer](https://www.polymer-project.org/). 它是非常有效的, 并且使用Aurelia的微任务队列(micro-task-queue)去批量更新DOM.
+
+很少的使用dirty-checking的绑定系统不会导致系统的性能问题. 大量的使用时有可能的. 幸运的是你可以避免dirty-checking通过简单的计算属性. 考虑下面的'fullName'属性例子: 
 
 ```javascript
 export class Person {
@@ -680,9 +681,9 @@ export class Person {
 }
 ```
 
-We've used the `@computedFrom` decorator to provide a hint to the Aurelia binding system.  The binding system now knows to only check `fullName` for changes when `firstName` or `lastName` changes.
+我们使用`@computedFrom`装饰器提供对于Aurelia绑定系统的暗示. 绑定系统这样就会知道仅仅去监测`fullName`的变化, 当 `firstName` 或者 `lastName` 发生变化时.
 
-It's also important to be mindful of how dirty-checking works.  When a property is "dirty-checked" the binding system periodically checks whether the property's current value matches the previously observed value for the property.  By default this check happens every 120 milliseconds.  This means your property's getter function has the potential to be called quite often which means it should be as efficient as possible.  You should also avoid unnecessarily returning new instances of objects or arrays.  Consider the following view:
+流行dirty-checking的工作机制也是很重要的. 当一个属性使用"dirty-checked", 绑定系统会定期的检查属性当前的值和先前监测的值是否匹配. 默认的检查周期是120毫秒. 这意味着你的属性的getter函数可能被非常频繁的调用, 所以你的方法应该尽可能的高效. 你应该避免无用的返回对象实例或者数组. 思考下下面的视图: 
 
 ```markup
 <template>
@@ -694,7 +695,7 @@ It's also important to be mindful of how dirty-checking works.  When a property 
 </template>
 ```
 
-Naive view model implementation:
+天真的视图模型的实现:
 
 ```javascript
 export class IssueSearch {
@@ -713,7 +714,7 @@ export class IssueSearch {
 }
 ```
 
-Improved view model implementation:
+改进的视图模型实现:
 
 ```javascript
 export class IssueSearch {
@@ -738,36 +739,36 @@ export class IssueSearch {
 }
 ```
 
-<h3 id="html-extensions"><a href="#html-extensions">HTML Extensions</a></h3>
+<h3 id="html-extensions"><a href="#html-extensions">HTML扩展(HTML Extensions)</a></h3>
 
-In addition to databinding, you also have the power of Aurelia's HTML extensions. There are two types:
+除了数据绑定, 你也可以使用Aurelia的HTML扩展. 有两种类型:
 
-* Custom Elements - Extend HTML with new tags! Your custom elements can have their own views (which use databinding and other html extensions) and optionally leverage [ShadowDOM](http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/) (even if the browser doesn't support it).
-* Custom Attributes - Extend HTML with new attributes which can be added to existing or custom elements. These attributes add new behavior to the elements.
+* 自定义元素 - 扩展HTML的标签! 你的自定义元素可以有它自己的视图(可以使用数据绑定和其他的html扩展), 并且有选择的使用[ShadowDOM](http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/)(甚至于浏览器不支持它).
+* 自定义属性 - 扩展HTML新的属性, 它可以被添加到已经存在或者自定义的元素上. 这些属性添加新的行为到元素上.
 
-Naturally, all of this works seamlessly with databinding. Let's look at the set of Custom Elements and Attributes that Aurelia provides for you and which are available globally in every view.
+自然的, 它们都无缝的和数据绑定一起发挥作用. 让我们看看Aurelia为你提供的一些自定义元素和属性, 它们是全局的对于每一个视图.
 
-<h4 id="show"><a href="#show">show</a></h4>
+<h4 id="show"><a href="#show">显示(show)</a></h4>
 
-The `show` Custom Attribute allows you to conditionally display an HTML element. If the value of show is `true` the element will be displayed, otherwise it will be hidden. This attribute does not add/remove the element from the DOM, but only changes its visibility. Here's an example:
+`show`自定义属性允许你有条件的展示一个HTML元素. 如果属性值为`true`元素会显示, 反之会隐藏. 这个属性不会从DOM中添加或者删除元素, 而仅仅是改变它的可见性. 下面是个例子:
 
 ```markup
 <div show.bind="isSaving" class="spinner"></div>
 ```
 
-When the `isSaving` property is true, the `div` will be visible, otherwise it will be hidden.
+当`isSaving`属性为true, `div`会可见, 否则会隐藏.
 
-<h4 id="if"><a href="#if">if</a></h4>
+<h4 id="if"><a href="#if">如果(if)</a></h4>
 
-The `if` Custom Attribute allows you to conditionally add/remove an HTML element. If the value is true, the element will also be present in the DOM, otherwise it will not.
+`if`自定义属性允许你有条件的添加或者删除一个HTML元素. 如果属性值为true, 元素会呈现在DOM中, 反之, 不会被呈现.
 
 ```markup
 <div if.bind="isSaving" class="spinner"></div>
 ```
 
-This example looks similar to that of `show` above. The difference is that if the binding expression evaluates to false, the `div` will be removed from the DOM, rather than just hidden.
+这个例子看起来和上面的`show`例子相似. 不同点在于, 如果绑定表达式计算值为false, `div`会被从DOM中删除, 而不是隐藏.
 
-If you need to conditionally add/remove a group of elements and you cannot place the `if` attribute on a parent element, then you can wrap those elements in a template tag which has the `if` attribute. Here's what that would look like:
+如果你需要有条件的添加或者移除一组元素, 你不能放置`if`属性在一个父元素上, 你可以包裹这些元素在一个template标签内. 下面是描述的例子:
 
 ```markup
 <template if.bind="hasErrors">
@@ -776,11 +777,11 @@ If you need to conditionally add/remove a group of elements and you cannot place
 </template>
 ```
 
->**Note:** It's important to note that you should NOT add an `if` behavior around a `<content>` element. The ShadowDOM does not support dynamically adding these elements they way you might expect. Instead, use a `show` behavior on a parent element.
+> **注意:** 这是很重要的, 你不应该添加`if`行为围绕着`<content>`元素. ShadowDOM不支持按照你期望的那样动态的添加这些元素. 作为替代, 在一个父元素上使用`show`行为.
 
-<h4 id="repeat"><a href="#repeat">repeat</a></h4>
+<h4 id="repeat"><a href="#repeat">重复(repeat)</a></h4>
 
-The `repeat` Custom Attribute allows you to render a template multiple times, once for each item in an array. Here's an example of how that renders out a list of customer names:
+`repeat`自定义属性允许你多次渲染一个模板, 数组的每一个项目渲染一次. 下面是个渲染自定义名称列表的例子:
 
 ```markup
 <ul>
@@ -788,9 +789,9 @@ The `repeat` Custom Attribute allows you to render a template multiple times, on
 </ul>
 ```
 
-An important note about the repeat attribute is that it works in conjunction with the `.for` binding command. This binding command interprets a special syntax in the form "item of collection" where "item" is the local name you will use in the template and "collection" is a normal binding expression that evaluates to an array or map.
+一个重要注意点是, repeat属性和`.for`绑定命名一起结合工作. 这个绑定命名解释一个特别的语法在"item of collection"的形式中, "item"是一个本地的名称, 会被在template中使用, "collection"是一个正常的计算为数组或者Map的绑定表达式.
 
-Speaking of Maps, here's how you would bind to an ES6 Map:
+说到Maps, 下面是一个怎么绑定ES6 Map的例子:
 
 ```markup
 <ul>
