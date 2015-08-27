@@ -799,7 +799,7 @@ export class IssueSearch {
 </ul>
 ```
 
-If instead of iterating over a collection you would rather iterate a specified number of times, you can instead use the syntax "i of count" where "i" is the index of the iteration and "count" is a binding expression that evaluates to an integer.
+如果你想替代遍历一个集合去遍历一个特别的数字次数, 你可以使用"i of count"这种替代语法, "i"是遍历的索引, "count"是一个可以计算为正整数的绑定表达式.
 
 ```markup
 <ul>
@@ -807,20 +807,20 @@ If instead of iterating over a collection you would rather iterate a specified n
 </ul>
 ```
 
-> **Note:**: Like the `if` attribute, you can also use a `template` tag to group a collection of elements that don't have a parent element.
+> **注意:** 和`if`属性一样, 你也可以使用一个`template`标签, 去包裹一组没有父元素的集合元素.
 
-Each item that is being repeated by the `repeat` attribute has several special contextual values available for binding:
+每一个被`repeat`属性重复的项目有一些特别的上下文值用于绑定.
 
-* `$parent` - At present, the main view model's properties and methods are not visible from within the repeated item. We hope to remedy this in an update soon. For the mean time, you can access that view-model with `$parent`.
-* `$index` - The index of the item in the array.
-* `$first` - True if the item is the first item in the array.
-* `$last` - True if the item is the last item in the array.
-* `$even` - True if the item has an even numbered index.
-* `$odd` - True if the item has an odd numbered index.
+* `$parent` - 当前, 主视图模型的属性和方法对于重复的项目是不可见的. 我们在将来的更新进行补救. 同时, 你可以访问主视图模型通过`$parent`.
+* `$index` - 数组中项目的索引.
+* `$first` - True 如果项目是数组的第一个.
+* `$last` - True 如果项目是数组的最后一个.
+* `$even` - True 如果项目的索引数偶数.
+* `$odd` - True 如果项目的索引数奇数.
 
-<h4 id="compose"><a href="#compose">compose</a></h4>
+<h4 id="compose"><a href="#compose">组合(compose)</a></h4>
 
-The `compose` Custom Element enables you to dynamically render UI into the DOM. Imagine you have a heterogeneous array of items, but each has a type property which tells you what it is. You can then do something like this:
+`compose`自定义元素允许你动态的渲染你的UI到DOM中. 假设你有一个多样的数组项目, 但是每一个都有一个类型属性告诉你它代表什么. 你接着可以这样做:
 
 ```markup
 <template repeat.for="item of items">
@@ -831,9 +831,9 @@ The `compose` Custom Element enables you to dynamically render UI into the DOM. 
 </template>
 ```
 
-Now, depending on the _type_ of the item, the `compose` element will load a different view-model (and view) and render it into the DOM. If the view-model has an `activate` method, the `compose` element will call it and pass in the `model` as a parameter. The `activate` method can even return a `Promise` to cause the composition process to wait until after some async work is done before actually databinding and rendering into the DOM.
+现在, 根据项目的 _type_ , `compose`元素会加载不同的视图模型(和视图), 并且渲染到DOM中. 如果视图模型有一个`activate`方法, `compose`元素会调用它, 并且传递给它`model`参数. `activate`方法甚至可以返回一个`Promise`, 这会延迟组合的处理直到一些异步任务完成后, 在正真的数据绑定和渲染到DOM之前.
 
-The `compose` element also has a `view` attribute which can be used in the same way as `view-model` if you don't wish to leverage the standard view/view-model convention. If you specify a `view` but no `view-model` then the view will be databound to the surrounding context.
+`compose`元素也有一个`view`属性, 可以像`view-model`一样使用, 如果你不希望沿用标准的view/view-model约定. 如果你指定`view`, 但是没有指定`view-model`, 视图将会绑定到外围的上下文中.
 
 ```markup
 <template repeat.for="item of items">
@@ -841,7 +841,7 @@ The `compose` element also has a `view` attribute which can be used in the same 
 </template>
 ```
 
-If you would like to databind a particular object when using only `view` rather than a full fledged view model (perhaps as part of a repeat), you may do so by binding the `view-model` directly. Now you will be able to use properties of that object directly in your `view`:
+如果你想绑定一个特别的对象, 当你仅仅使用`view`, 而不是齐全的视图模型(可能作为重复(repeat)的一部分), 你可以直接绑定 `view-model`. 然后你将能够直接的使用对象的属性在你的视图中.
 
 ```markup
 <template>
@@ -851,27 +851,28 @@ If you would like to databind a particular object when using only `view` rather 
 </template>
 ```
 
-What if you want to determine the view dynamically based on data though? or runtime conditions? You can do that too by implementing a `getViewStrategy()` method on your view-model. It can return a relative path to the view or an instance of a `ViewStrategy` for custom view loading behavior. The nice part is that this method is executed after the `activate` callback, so you have access to the model data when determining the view.
+万一你想基于数据动态决定视图怎么办呢? 或者运行时的条件? 你可以通过在视图模型中实现`getViewStrategy()` 方法. 它可以返回一个视图的相对路径, 或者一个`ViewStrategy`实例来决定自定义视图的加载方式. 一个亮点是, 这个方法在`activate`回调之后执行, 所以你可以访问模型数据在决定加载什么视图的时候.
 
-<h4 id="global-behavior"><a href="#global-behavior">global-behavior</a></h4>
 
-This is not an HTML enhancement that you will use directly. Rather, it works in conjunction with a custom binding command to dynamically enable the use of jQuery plugins and similar APIs declaratively in HTML. Let's look at an example in order to help clarify the idea:
+<h4 id="global-behavior"><a href="#global-behavior">全局行为(global-behavior)</a></h4>
+
+它不是你将直接使用的HTML增强. 而是, 它需要结合自定义的绑定命令去动态的开启jQuery插件和HTML中相似的APIs声明. 让我们看一个例子帮助我们理解:
 
 ```markup
 <div jquery.modal="show: true; keyboard.bind: allowKeyboard">...</div>
 ```
 
-This sample is based on the [Bootstrap modal widget](http://getbootstrap.com/javascript/#modals). In this case, the `modal` jQuery widget will be attached to the `div` and it will be configured with its `show` option set to `true` and its `keyboard` option set to the value of the `allowKeyboard` property on the view-model. When the containing view is unbound, the jQuery widget will be destroyed.
+这个例子是基于[Bootstrap modal widget](http://getbootstrap.com/javascript/#modals). 在这个例子中, `modal` jQuery插件将会附着在`div`上, 并且会配置它的`show`选项为`true`, 设置`keyboard` 属性为视图模型的 `allowKeyboard`属性的值. 当包含它的视图解除绑定后, jQuery组件会被销毁.
 
-This capability combines the special `global-behavior` with custom syntax to enable these dynamic capabilities. The syntax you see here is based on the syntax of the native `style` attribute which lists properties and values separated in the same fashion as above. Note that you can use binding commands such as `.bind` to pass data from your view-model directly to the plugin or `.call` to pass a callback function directly to the plugin.
+组合特别的`global-behavior`和自定义语法的能力开启这些动态的能力. 这儿你看到的语法是基于本地的`style`属性的语法, 它列举属性和值用上面时尚的方式分隔. 注意, 你可以使用绑定命令(`.bind`)来传递视图模型中的数据到插件, 或者用`.call`来直接传递一个回调函数到插件中.
 
-Here's how it works:
+这里是它的工作机制:
 
-When the binding system sees a binding command that it doesn't recognize, it dynamically interprets it. The attribute name is mapped to a global binding handler which interprets the binding command. The handler can use the values to create an options object which it can pass to the plugin. When the view is unbound, the handler can also cleanup after itself. In this case the jQuery handler knows the pattern for instantiating plugins and using the `destroy` method to cleanup.
+当绑定系统看到它不认识的绑定命令, 它会动态的解释它, 属性名被映射到全局的绑定处理器, 它会解释绑定命令. 处理器可以使用它的值去创建一个选项对象, 然后传递给插件. 当视图被解除绑定, 处理器也可以清理插件. 在这种情形, jQuery处理器知道实例化插件的形式, 并且使用`destroy` 方法清理资源.
 
-> **Note:** The `global-behavior` has a handlers list you must configure. It is only configured with jQuery by default. You can turn all of this off, if you desire, but it makes it easy to take advantage of basic jQuery plugins without any work on your part.
+> **注意:** `global-behavior`有一个你必须配置的处理器. 它被默认配置成jQuery. 如果你不想要, 你可以把它们全部关闭, 但是开启它可以让你不用工作额外工作就可以容易的利用基本的jQuery插件.
 
-<h2 id="routing"><a href="#routing">Routing</a></h2>
+<h2 id="routing"><a href="#routing">路由(Routing)</a></h2>
 
 There are many different application styles you could be called upon to create. From navigation apps, to dashboards, to MDI interfaces, Aurelia can handle them all. In many of these cases a key component of your architecture is a client-side router, capable of translating url changes into application state.
 
