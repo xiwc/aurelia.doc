@@ -874,11 +874,11 @@ export class IssueSearch {
 
 <h2 id="routing"><a href="#routing">路由(Routing)</a></h2>
 
-There are many different application styles you could be called upon to create. From navigation apps, to dashboards, to MDI interfaces, Aurelia can handle them all. In many of these cases a key component of your architecture is a client-side router, capable of translating url changes into application state.
+有很多不同的应用程序风格你可以被调用根据你的创造. 从导航应用, 到仪表面板, 到多文档界面, Aurelia都可以处理. 这些场景大都有一个主要的结构组件, 叫做客户端路由, 承担翻译url改变到应用程序的状态改变.
 
-If you've read the getting started guide, you know that there are two parts to routing. First, there's the `Router` which lives in your view-model. It's configured with route information and controls navigation. Then, there's the `router-view` which lives in the view and is responsible for displaying whatever the router identifies as the current state.
+如果你已经阅读过开始指导, 你就会了解路由有两个部分, 第一个, 在你的视图模型中有一个`Router`. 它被配置路由导航的信息和导航控制. 第二个, 在视图中有一个`router-view`, 负责展示路由表示的当前界面状态.
 
-Let's look at an example configuration.
+让我们看一个配置例子:
 
 ```javascript
 export class App {
@@ -896,9 +896,9 @@ export class App {
 }
 ```
 
-We begin by implementing the `configureRouter` method. We can optionally set a `title` property to be used in constructing the document's title, but the most important part is setting up the routes. The router's `map` method takes a simple JSON data structure representing your route table. The two most important properties are `route` (a string or array of strings), which defines the route pattern, and `moduleId`, which has the *relative* module Id path to your view-model. You can also set a `name` property, to be used to generate a link to the route later, a `title` property, to be used when generating the document's title, a `nav` property indicating whether or not the route should be included in the navigation model (it can also be a number indicating order) and an `href` property which you can use to bind to in the _navigation model_.
+我们开始于实现`configureRouter`方法. 我们可以可选的设置一个`title`属性, 去用于构建文档的标题, 但是最重要的部分是设置路由. 路由的`map`方法接受一个简单的JSON数据结构表示你的路由表. 最重要的两个属性是`route`(一个字符串或者字符串数组), 它定义路由的形式, `moduleId`, 指定为相对于你视图模型`relative`模块ID. 你也可以设置一个`name`属性, 用于在以后生成一个路由链接, 设置一个`title`属性, 用于生成文档标题, 设置一个`nav`属性, 标识是否该路由会被包含在导航模型中(它也可以是一个标识顺序的数字).  设置一个`href`属性, 用于绑定到 _navigation model_ .
 
-So, what options do you have for the route pattern?
+所以, 对于路由形式你可以有那些配置选项?
 
 * static routes
     - ie 'home' - Matches the string exactly.
@@ -924,16 +924,16 @@ All routes with a truthy `nav` property are assembled into a `navigation` array.
 </template>
 ```
 
-<h3 id="the-screen-activation-lifecycle"><a href="#the-screen-activation-lifecycle">The Screen Activation Lifecycle</a></h3>
+<h3 id="the-screen-activation-lifecycle"><a href="#the-screen-activation-lifecycle">屏幕激活生命周期(The Screen Activation Lifecycle)</a></h3>
 
-Whenever the router processes a navigation, it enforces a strict lifecycle on the view-models that it is navigating to and from. There are four stages in the lifecycle. You can opt-in to any of them by implementing the appropriate method on your view-model's class. Here's a list of the lifecycle callbacks:
+不管什么时候路由处理一个导航切换, 它会强制执行视图模型中的一个严格的生命周期, 它导航到哪里, 来自哪里. 有四个生命周期场景. 你可以选择性的进入通过实现适当的方法在你的视图模型中. 下面是生命周期回调方法的列表:
 
 * `canActivate(params, routeConfig, navigationInstruction)` - Implement this hook if you want to control whether or not your view-model _can be navigated to_. Return a boolean value, a promise for a boolean value, or a navigation command.
 * `activate(params, routeConfig, navigationInstruction)` - Implement this hook if you want to perform custom logic just before your view-model is displayed. You can optionally return a promise to tell the router to wait to bind and attach the view until after you finish your work.
 * `canDeactivate()` - Implement this hook if you want to control whether or not the router _can navigate away_ from your view-model when moving to a new route. Return a boolean value, a promise for a boolean value, or a navigation command.
 * `deactivate()` - Implement this hook if you want to perform custom logic when your view-model is being navigated away from. You can optionally return a promise to tell the router to wait until after your finish your work.
 
-The `params` object will have a property for each parameter of the route that was parsed, as well as a property for each query string value. `routeConfig` will be the original route configuration object that you set up. `routeConfig` will also have a new `navModel` property, which can be used to change the document title for data loaded by your view-model. For example:
+`params`对象会包含一个属性对应于每一个解析的路由参数, 同时也对应于每一个查询字符参数. `routeConfig`是你设置的原始的路由配置. `routeConfig` 会有一个新的 `navModel` 属性, 可用于改变文档标题, 当在你的视图模型中加载数据. 例如:
 
 ```javascript
 activate(params, routeConfig) {
@@ -954,7 +954,7 @@ Whenever you set up a route to map to a view-model, that view-model can actually
 
 A child router is just a router like any other. So, everything we've discussed above applies. To add a child router, just implement the `configureRouter` method again. The screen activation lifecycle discussed above applies to child routers as well. Each phase of the lifecycle is run against the entire router hierarchy before moving on to the next phase. The activate hooks run from top to bottom and the deactivate hooks run from bottom to top.
 
-<h3 id="conventional-routing"><a href="#conventional-routing">Conventional Routing</a></h3>
+<h3 id="conventional-routing"><a href="#conventional-routing">常规路由(Conventional Routing)</a></h3>
 
 As with everything in Aurelia, we have strong support for conventions. So, you can actually choose to dynamically route rather than pre-configuring all your routes up front. Here's how you configure a router to do that:
 
@@ -973,7 +973,7 @@ All you have to do is set the `instruction.config.moduleId` property and you are
 
 >**Note:** Though not necessarily related to conventional routing, you may sometimes have a need to asynchronously configure your router. For example, you may need to call a web service to get user permissions before setting up routes. To do this, return a promise from `configureRouter`.
 
-<h3 id="customizing-the-navigation-pipeline"><a href="#customizing-the-navigation-pipeline">Customizing the Navigation Pipeline</a></h3>
+<h3 id="customizing-the-navigation-pipeline"><a href="#customizing-the-navigation-pipeline">定制导航管道(Customizing the Navigation Pipeline)</a></h3>
 
 The router pipeline is composed out of separate steps that run in succession. Each of these steps has the ability to modify what happens during routing, or stop the routing altogether. The pipeline also contains a few extensibility points where you can add your own steps. These are `authorize` and `modelbind`. `authorize` happens before `modelbind`. These extensions are called route filters.
 
@@ -1022,7 +1022,7 @@ config.addPipelineStep('myname', MySecondStep); // Adds another step to it.
 config.addPipelineStep('modelbind', 'myname'); // Makes the entire `myname` pipeline run as part of the `modelbind` pipeline.
 ```
 
-<h3 id="configuring-push-state"><a href="#configuring-push-state">Configuring PushState</a></h3>
+<h3 id="configuring-push-state"><a href="#configuring-push-state">配置PushState(Configuring PushState)</a></h3>
 
 If you'd prefer to get rid of the `#` (hashes) in your URLs, then you're going to have to enable `pushState` in your app. Good thing Aurelia supports that! You will also have to do some work on the server side to ensure it works properly. Let's start with the Aurelia side of the equation.
 
@@ -1172,6 +1172,7 @@ export class YourViewModel {
 > **Note:** Keep in mind that by forcing refreshes, Aurelia has to rebuild the complete VM. As for performance reasons a simple observer on the `router.currentInstruction` might be sufficient for scenarios where you'd simply like to exchange some data.
 
 <h3 id="rendering-multiple-view-ports"><a href="#rendering-multiple-view-ports">Rendering multiple ViewPorts</a></h3>
+
 Sometimes you need to render content in more than one area of the page. Aurelia's router lets you specify multiple `router-view`s to be activated by a single route. First, add named `router-view` elements to your view:
 
 ```markup
@@ -1230,7 +1231,7 @@ Aurelia has a powerful and extensible HTML template compiler. The compiler itsel
 These extensions are not visible to the compiler by default. There are three main ways to plug them in:
 
 * Use the `require` element to require an extension in a view. The `from` attribute specifies the relative path to the extension's module. The extension will be locally defined.
-* Use the Aurelia object during your bootstrapping phase to call `.globalizeResources(...resourcePaths)` to register extensions with global visibility in your application.
+* Use the Aurelia object during your bootstrapping phase to call `.globalResources(...resourcePaths)` to register extensions with global visibility in your application.
 * Install a plugin that registers extensions with global visibility in your application.
 
 >**Note:** A recommended practice for your own apps is to place all your app-specific extensions, value converters, etc. into a _resources_ folder. Then create an _index.js_ file that turns them all into an internal feature plugin. Finally, install the feature during your app's bootstrapping phase using `aurelia.use.feature('resources')`. This will keep your resources located in a known location, along with their registration code. It will also keep your configuration file clean and simple.
