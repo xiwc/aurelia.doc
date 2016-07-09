@@ -900,14 +900,15 @@ export class App {
 
 所以, 对于路由形式你可以有那些配置选项?
 
-* static routes
-    - ie 'home' - Matches the string exactly.
-* parameterized routes
-    - ie  'users/:id/detail' - Matches the string and then parses an `id` parameter. Your view-model's `activate` callback will be called with an object that has an `id` property set to the value that was extracted from the url.
-* wildcard routes
-    - ie 'files*path' - Matches the string and then anything that follows it. Your view-model's `activate` callback will be called with an object that has a `path` property set to the wildcard's value.
+* 静态路由
+    - 例如`home`是严格的字符串匹配.
+* 参数化路由
+    - 例如`users/:id/detail`是字符串匹配并且解析一个`id`参数. 你的视图模型回调函数`activate`会传递一个包含`id`属性的对象作为参数,这个`id`就是从url中匹配得到的.
+* 通配符路由
+    - 例如`files*path`是匹配任何这种形式的字符串. 你的视图模型回调函数`activate`会传递一个包含`path`属性的对象作为参数,这个`path`就是通配符匹配得到的.
 
-All routes with a truthy `nav` property are assembled into a `navigation` array. This makes it really easy to use databinding to generate a menu structure. Another important property for binding is the `isNavigating` property. Here's some simple markup that shows what you might pair with the view-model shown above:
+所有有`nav`属性的路由被装配到一个`navigation`数组. 这使得很容易通过数据绑定产生一个菜单结构. 另一个重要的绑定属性是`isNavigating`. 下面是一个简单的例子:
+
 
 ```markup
 <template>
@@ -924,7 +925,7 @@ All routes with a truthy `nav` property are assembled into a `navigation` array.
 </template>
 ```
 
-<h3 id="the-screen-activation-lifecycle"><a href="#the-screen-activation-lifecycle">屏幕激活生命周期(The Screen Activation Lifecycle)</a></h3>
+### 屏幕激活生命周期(The Screen Activation Lifecycle)
 
 不管什么时候路由处理一个导航切换, 它会强制执行视图模型中的一个严格的生命周期, 它导航到哪里, 来自哪里. 有四个生命周期场景. 你可以选择性的进入通过实现适当的方法在你的视图模型中. 下面是生命周期回调方法的列表:
 
